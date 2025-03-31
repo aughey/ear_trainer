@@ -1,54 +1,74 @@
-# React + TypeScript + Vite
+# Ear Trainer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application designed to help musicians develop their relative pitch and interval recognition skills by generating and comparing audio frequencies.
 
-Currently, two official plugins are available:
+## Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Ear Trainer is an interactive tool that allows users to:
 
-## Expanding the ESLint configuration
+- Create multiple audio oscillators with customizable frequencies
+- Play pure sine wave tones for reference and practice
+- Compare musical intervals side-by-side
+- View the cents difference between tones
+- Control frequencies using coarse and fine adjustments
+- Generate tones based on standard musical notes (C4-C6)
+- Create intervals relative to other tones
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+This application is particularly useful for:
+- Ear training for musicians
+- Learning to recognize musical intervals
+- Developing a sense of relative pitch
+- Understanding the mathematical relationships between intervals
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Features
+
+- **Multiple oscillators**: Create and manage multiple tone generators
+- **Three operation modes**:
+  - Absolute Frequency: Set exact frequencies in Hz
+  - Absolute Note: Select from standard musical notes
+  - Relative Interval: Create perfect intervals based on another oscillator
+- **Real-time analysis**: View the cents difference between tones
+- **Precise control**: Fine-tune frequencies with coarse/fine adjustment sliders
+
+## Technologies
+
+- React 19
+- TypeScript
+- Vite
+- Web Audio API
+
+## Live Demo
+
+Try the application online: [https://aughey.github.io/ear_trainer/](https://aughey.github.io/ear_trainer/)
+
+## Development
+
+### Prerequisites
+- Node.js (v18+)
+- Yarn
+
+### Setup
+1. Clone the repository
+```bash
+git clone https://github.com/aughey/ear_trainer.git
+cd ear_trainer
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Install dependencies
+```bash
+yarn install
 ```
+
+3. Run the development server
+```bash
+yarn dev
+```
+
+4. Build for production
+```bash
+yarn build
+```
+
+## License
+
+MIT
