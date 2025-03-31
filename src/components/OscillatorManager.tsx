@@ -1,10 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { Oscillator, Interval, NOTE_TO_FREQUENCY, INTERVAL_RATIOS, OscillatorMode } from '../types';
+import { CoarseFineFrequency } from './CoarseFineFrequency';
 
 export function OscillatorManager() {
     const [oscillators, setOscillators] = useState<Oscillator[]>([]);
     const audioContextRef = useRef<AudioContext | null>(null);
     const oscillatorNodesRef = useRef<{ [key: string]: OscillatorNode }>({});
+
+    // Function to calculate cents difference between two frequencies
+    const calculateCents = (f1: number, f2: number): number => {
+        return Math.round(1200 * Math.log2(f2 / f1));
+    };
+
+    // Get previous oscillator if exists
+    const getPreviousOscillator = (index: number): Oscillator | null => {
+        return index > 0 ? oscillators[index - 1] : null;
+    };
 
     useEffect(() => {
         audioContextRef.current = new AudioContext();
@@ -163,115 +174,93 @@ export function OscillatorManager() {
             <button onClick={createOscillator}>Add Oscillator</button>
 
             <div className="oscillators-list">
-                {oscillators.map(oscillator => (
-                    <div key={oscillator.id} className="oscillator-controls">
-                        <div className="oscillator-header">
-                            <h3>Oscillator {oscillators.indexOf(oscillator) + 1}</h3>
-                            <button onClick={() => deleteOscillator(oscillator.id)}>Delete</button>
-                        </div>
+                {oscillators.map((oscillator, index) => {
+                    const prevOsc = getPreviousOscillator(index);
+                    const centsDifference = prevOsc ? calculateCents(prevOsc.frequency, oscillator.frequency) : null;
 
-                        <div className="mode-control">
-                            <label>
-                                Mode:
-                                <select
-                                    value={oscillator.mode}
-                                    onChange={(e) => setMode(oscillator.id, e.target.value as OscillatorMode)}
-                                >
-                                    <option value="absolute-frequency">Absolute Frequency</option>
-                                    <option value="absolute-note">Absolute Note</option>
-                                    <option value="relative-interval">Relative Interval</option>
-                                </select>
-                            </label>
-                        </div>
+                    return (
+                        <div key={oscillator.id} className="oscillator-controls">
+                            <div className="oscillator-header">
+                                <h3>Oscillator {index + 1}</h3>
+                                <button onClick={() => deleteOscillator(oscillator.id)}>Delete</button>
+                            </div>
 
-                        {oscillator.mode === 'absolute-frequency' && (
-                            <div className="frequency-control">
+                            <div className="mode-control">
                                 <label>
-                                    Frequency: {oscillator.frequency.toFixed(2)} Hz
-                                    <div className="frequency-sliders">
-                                        <div className="slider-group">
-                                            <label>Coarse (1 Hz steps)</label>
-                                            <input
-                                                type="range"
-                                                min="100"
-                                                max="3000"
-                                                step="1"
-                                                value={Math.floor(oscillator.frequency)}
-                                                onChange={(e) => {
-                                                    const coarse = Number(e.target.value);
-                                                    const fine = oscillator.frequency % 1;
-                                                    updateFrequency(oscillator.id, coarse + fine);
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="slider-group">
-                                            <label>Fine (0.01 Hz steps)</label>
-                                            <input
-                                                type="range"
-                                                min="0"
-                                                max="99"
-                                                step="1"
-                                                value={Math.floor((oscillator.frequency % 1) * 100)}
-                                                onChange={(e) => {
-                                                    const coarse = Math.floor(oscillator.frequency);
-                                                    const fine = Number(e.target.value) / 100;
-                                                    updateFrequency(oscillator.id, coarse + fine);
-                                                }}
-                                            />
-                                        </div>
+                                    Mode:
+                                    <select
+                                        value={oscillator.mode}
+                                        onChange={(e) => setMode(oscillator.id, e.target.value as OscillatorMode)}
+                                    >
+                                        <option value="absolute-frequency">Absolute Frequency</option>
+                                        <option value="absolute-note">Absolute Note</option>
+                                        <option value="relative-interval">Relative Interval</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                            {oscillator.mode === 'absolute-frequency' && (
+                                <CoarseFineFrequency
+                                    value={oscillator.frequency}
+                                    onChange={(frequency) => updateFrequency(oscillator.id, frequency)}
+                                />
+                            )}
+
+                            {oscillator.mode === 'absolute-note' && (
+                                <div className="note-control">
+                                    <label>
+                                        Note:
+                                        <select
+                                            value={oscillator.note || ''}
+                                            onChange={(e) => setNote(oscillator.id, e.target.value)}
+                                        >
+                                            <option value="">Select a note</option>
+                                            {Object.keys(NOTE_TO_FREQUENCY).map(note => (
+                                                <option key={note} value={note}>{note}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+                                    <div className="frequency-display">
+                                        Frequency: {oscillator.frequency.toFixed(2)} Hz
                                     </div>
-                                </label>
-                            </div>
-                        )}
-
-                        {oscillator.mode === 'absolute-note' && (
-                            <div className="note-control">
-                                <label>
-                                    Note:
-                                    <select
-                                        value={oscillator.note || ''}
-                                        onChange={(e) => setNote(oscillator.id, e.target.value)}
-                                    >
-                                        <option value="">Select a note</option>
-                                        {Object.keys(NOTE_TO_FREQUENCY).map(note => (
-                                            <option key={note} value={note}>{note}</option>
-                                        ))}
-                                    </select>
-                                </label>
-                                <div className="frequency-display">
-                                    Frequency: {oscillator.frequency.toFixed(2)} Hz
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {oscillator.mode === 'relative-interval' && (
-                            <div className="interval-control">
-                                <label>
-                                    Interval:
-                                    <select
-                                        value={oscillator.interval || ''}
-                                        onChange={(e) => setInterval(oscillator.id, e.target.value as Interval)}
-                                    >
-                                        <option value="">Select an interval</option>
-                                        {Object.keys(INTERVAL_RATIOS).map(interval => (
-                                            <option key={interval} value={interval}>{interval}</option>
-                                        ))}
-                                    </select>
-                                </label>
-                                <div className="frequency-display">
-                                    Frequency: {oscillator.frequency.toFixed(2)} Hz
+                            {oscillator.mode === 'relative-interval' && (
+                                <div className="interval-control">
+                                    <label>
+                                        Interval:
+                                        <select
+                                            value={oscillator.interval || ''}
+                                            onChange={(e) => setInterval(oscillator.id, e.target.value as Interval)}
+                                        >
+                                            <option value="">Select an interval</option>
+                                            {Object.keys(INTERVAL_RATIOS).map(interval => (
+                                                <option key={interval} value={interval}>{interval}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+                                    <div className="frequency-display">
+                                        Frequency: {oscillator.frequency.toFixed(2)} Hz
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        <button
-                            onClick={() => toggleOscillator(oscillator)}
-                            className={oscillator.isPlaying ? 'playing' : ''}
-                        >
-                            {oscillator.isPlaying ? 'Stop' : 'Play'}
-                        </button>
-                    </div>
-                ))}
+                            {centsDifference !== null && (
+                                <div className="cents-display">
+                                    Cents from previous: {centsDifference > 0 ? '+' : ''}{centsDifference}¢
+                                </div>
+                            )}
+
+                            <button
+                                onClick={() => toggleOscillator(oscillator)}
+                                className={oscillator.isPlaying ? 'playing' : ''}
+                            >
+                                {oscillator.isPlaying ? 'Stop' : 'Play'}
+                            </button>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

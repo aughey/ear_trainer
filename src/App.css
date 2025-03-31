@@ -1,8 +1,26 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 #root {
-  max-width: 1280px;
+  max-width: 100%;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -45,14 +63,17 @@
 }
 
 .app {
-  max-width: 800px;
+  max-width: 100%;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .oscillator-manager {
   margin-top: 2rem;
+  width: 100%;
 }
 
 .oscillators-list {
@@ -60,6 +81,7 @@
   flex-direction: column;
   gap: 1.5rem;
   margin-top: 1.5rem;
+  width: 100%;
 }
 
 .oscillator-controls {
@@ -67,6 +89,8 @@
   border-radius: 8px;
   padding: 1.5rem;
   text-align: left;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .oscillator-header {
@@ -158,9 +182,25 @@ button.playing {
   color: #888;
 }
 
+.cents-display {
+  margin-top: 0.5rem;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: #646cff;
+  padding: 0.3rem 0.6rem;
+  background-color: rgba(100, 108, 255, 0.1);
+  border-radius: 4px;
+  display: inline-block;
+}
+
 @media (prefers-color-scheme: light) {
   .frequency-display {
     color: #666;
+  }
+
+  .cents-display {
+    color: #4752e9;
+    background-color: rgba(71, 82, 233, 0.1);
   }
 }
 
@@ -182,8 +222,18 @@ button.playing {
   color: #888;
 }
 
+.fine-tune-value {
+  font-size: 0.9em;
+  color: #888;
+  margin-left: 0.5rem;
+}
+
 @media (prefers-color-scheme: light) {
   .slider-group label {
+    color: #666;
+  }
+
+  .fine-tune-value {
     color: #666;
   }
 }
