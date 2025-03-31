@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +24,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -39,4 +42,148 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.oscillator-manager {
+  margin-top: 2rem;
+}
+
+.oscillators-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.oscillator-controls {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.oscillator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.oscillator-header h3 {
+  margin: 0;
+}
+
+.frequency-control,
+.note-control,
+.interval-control {
+  margin: 1rem 0;
+}
+
+.frequency-control label,
+.note-control label,
+.interval-control label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input[type="range"] {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: #2a2a2a;
+  color: inherit;
+  border: 1px solid #3a3a3a;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #2a2a2a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: #646cff;
+}
+
+button.playing {
+  background-color: #4a4a4a;
+  border-color: #646cff;
+}
+
+@media (prefers-color-scheme: light) {
+  .oscillator-controls {
+    background-color: #f9f9f9;
+  }
+
+  select {
+    background-color: #ffffff;
+    border-color: #e0e0e0;
+  }
+
+  button {
+    background-color: #ffffff;
+  }
+
+  button:hover {
+    border-color: #747bff;
+  }
+
+  button.playing {
+    background-color: #e0e0e0;
+    border-color: #747bff;
+  }
+}
+
+.frequency-display {
+  margin-top: 0.5rem;
+  font-size: 0.9em;
+  color: #888;
+}
+
+@media (prefers-color-scheme: light) {
+  .frequency-display {
+    color: #666;
+  }
+}
+
+.frequency-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.slider-group label {
+  font-size: 0.9em;
+  color: #888;
+}
+
+@media (prefers-color-scheme: light) {
+  .slider-group label {
+    color: #666;
+  }
 }
