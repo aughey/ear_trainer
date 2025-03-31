@@ -19,11 +19,11 @@ export function CoarseFineFrequency({ value, onChange }: CoarseFineFrequencyProp
                 Frequency: {(coarse + fine).toFixed(2)} Hz
                 <div className="frequency-sliders">
                     <div className="slider-group">
-                        <label>Coarse (100-3000 Hz)</label>
+                        <label>Coarse (400-800 Hz)</label>
                         <input
                             type="range"
-                            min="100"
-                            max="3000"
+                            min="400"
+                            max="800"
                             step="1"
                             value={coarse}
                             onChange={(e) => setCoarse(Number(e.target.value))}
